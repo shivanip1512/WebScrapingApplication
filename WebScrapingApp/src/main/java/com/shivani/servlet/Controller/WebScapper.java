@@ -1,6 +1,8 @@
 package com.shivani.servlet.Controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -18,19 +20,25 @@ import com.shivani.servlet.Model.ImdbScraperModel;
 public class WebScapper extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String url = request.getParameter("url");//"https://www.imdb.com/india/top-rated-indian-movies/";
-		
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String url = request.getParameter("url");// "https://www.imdb.com/india/top-rated-indian-movies/";
+
 		Elements trElements = ImdbScraperModel.processData(url);
-		
+
+		List movieTitle = new ArrayList();
+		List rating = new ArrayList();
+
+		for (Element tr : trElements) {
+			movieTitle.add(tr.select("td.titleColumn > a").text());
+			rating.add(tr.select("td.imdbRating").text());
+		}
+
+		request.setAttribute("movieTitle", movieTitle);
+		request.setAttribute("rating", rating);
+
 		RequestDispatcher rd = request.getRequestDispatcher("View.jsp");
 		rd.forward(request, response);
-		
-		for (Element tr : trElements) {
-			String movieTitle = tr.select("td.titleColumn > a").text();
-			String rating = tr.select("td.imdbRating").text();
-			System.out.println(movieTitle+" "+rating);
-		}
 	}
 
 }

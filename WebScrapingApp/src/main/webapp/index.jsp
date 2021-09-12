@@ -7,7 +7,10 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<a href="webScapper?url=https://www.imdb.com/india/top-rated-indian-movies/">Top
-		Bollywood movies</a>
+	<form action="webScapper" method="post">
+		<input type="hidden" name="url"
+			value="https://www.imdb.com/india/top-rated-indian-movies/" /> 
+		<input type="submit" value="Top Bollywood movies"/>
+	</form>
 </body>
 </html>
